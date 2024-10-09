@@ -36,7 +36,7 @@ jupyter-client==6.1.7
 jupyter-core==4.6.3
 kiwisolver==1.2.0
 MarkupSafe==1.1.1
-matplotlib==3.3.1
+matplotlib==3.5.1  # Updated version of matplotlib
 mistune==0.8.4
 nbconvert==5.6.1
 nbformat==5.0.7
@@ -46,7 +46,7 @@ packaging==20.4
 pandas==1.1.1
 pandocfilters==1.4.2
 parso==0.7.1
-pathtools==0.1.2
+# pathtools==0.1.2  # Commented out for now to avoid dependency issues
 pickleshare==0.7.5
 Pillow==7.2.0
 pipreqs==0.4.10
