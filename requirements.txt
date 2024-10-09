@@ -41,12 +41,11 @@ mistune==0.8.4
 nbconvert==5.6.1
 nbformat==5.0.7
 notebook==6.1.3
-numpy==1.21.0  # Updated version
+numpy==1.21.0
 packaging==20.4
 pandas==1.1.1
 pandocfilters==1.4.2
 parso==0.7.1
-# pathtools==0.1.2  # Remove or comment out if not needed
 pickleshare==0.7.5
 Pillow==7.2.0
 pipreqs==0.4.10
@@ -89,4 +88,4 @@ yarg==0.1.9
 # Added for build support
 setuptools>=42
 wheel
-distro  # For restoring distutils on Python 3.12
+distlib  # For managing distributions and build processes
