@@ -7,20 +7,19 @@ import streamlit as st
 
 st.set_page_config(
     page_title="AB test sample size calculator",
-    page_icon="https://rfoxdata.co.uk/assets/favicon/favicon-32x32.png",
 )
 
-roboto = {"fontname": "Roboto", "size": "11"}
-roboto_light = {"fontname": "Roboto", "size": "10", "weight": "light"}
-roboto_title = {"fontname": "Roboto", "size": "12", "weight": "bold"}
-roboto_small = {"fontname": "Roboto", "size": "7.5", "weight": "light"}
+roboto = {"fontname": "sans-serif", "size": "11"}
+roboto_light = {"fontname": "sans-serif", "size": "10", "weight": "light"}
+roboto_title = {"fontname": "sans-serif", "size": "12", "weight": "bold"}
+roboto_small = {"fontname": "sans-serif", "size": "7.5", "weight": "light"}
 
-font = {"family": "sans-serif", "sans-serif": "roboto", "size": 11}
+font = {"family": "sans-serif", "size": 11}
 
 plt.rc("font", **font)
 
 """
-# AB Test Sample Sizer
+# Tiny King and Quilter's Super Famous AB Test Sample Sizer
 
 Input the expected daily observations and conversions to return a plot
 containing potential runtimes and their associated minimum detectable effect.
@@ -74,7 +73,6 @@ def compute_sample_size(p0, mde, alpha=0.05, beta=0.2, tails="Two"):
     Minimum number of observations required per variant.
     """
 
-    # Conditional alpha value based on whether one or two tail test
     if tails == "Two":
         computed_alpha = alpha / 2
     else:
@@ -122,8 +120,6 @@ def create_mde_table(
 
     df = pd.DataFrame([mde_range, p1, sample_sizes]).transpose()
     df.columns = ["MDE", "New Conv. Rate", "Sample Size"]
-    # We convert to np.int64 to round the number and also to avoid
-    # hitting the int32 limit
     df["Sample Size"] = df["Sample Size"].astype(np.int64)
     df["Days"] = df["Sample Size"] / daily_observations
     df["Weeks"] = df["Days"] / 7
@@ -246,24 +242,19 @@ def mde_plot(data):
     ax.set_xlabel("Minimum detectable effect", **roboto)
     ax.set_ylabel("")
 
-    # Set limit to reasonable amount of time
     if ax.get_ylim()[1] > 60:
         ax.set_ylim([0, 7 * max_runtime * 1.2])
 
-    # Set x-lim
     x_limit = data[data["Weeks"] <= 1]["MDE"].min() * 2
     ax.set_xlim([0, x_limit])
 
     for week in range(1, max_runtime + 1):
         plot_mde_marker(data, week, ax)
 
-    # Clean up layout of graph, removing borders
     ax.yaxis.grid(True)
     ax.spines["left"].set_visible(False)
     ax.spines["right"].set_visible(False)
     ax.spines["top"].set_visible(False)
-
-    # Hiding the y-axis
     ax.axes.get_yaxis().set_visible(False)
 
     st.write(fig)
@@ -275,9 +266,6 @@ def mde_plot(data):
 Run times are plotted with their associated minimum detectable effect (MDE).
 The longer a test runs, the smaller the impact size the test has the data to
 detect. This is sometimes referred to as the accuracy of a test.
-
-What is an acceptable MDE depends on how much of an impact you believe you
-might see from your test.
 """
 
 mde_plot(df)
@@ -291,18 +279,3 @@ if st.checkbox("Show table"):
             week_text = "week"
         new[f"{i} {week_text}"] = df[df["Weeks"] <= i].iloc[0]
     st.write(new)
-
-# """
-# ## Formula used
-# """
-# st.latex(r"""
-# \left(\Phi\left(1 - \frac{\alpha}{2}\right)+\Phi(1-\beta)\right)^2
-# \cdot \frac{p_0(1-p_0) + p_1(1-p_1)}{\left(p_0-p_1\right)^2}
-# """)
-
-"""
-### See also
-
-* [AB test significance calculator](https://abtestcalculator.herokuapp.com/)
-* [Github Repository](https://github.com/rjjfox/ab-test-samplesize)
-"""
